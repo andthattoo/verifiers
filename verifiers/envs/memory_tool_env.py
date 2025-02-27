@@ -8,8 +8,8 @@ from verifiers.envs.multistep_env import MultiStepEnv
 from verifiers.envs.tool_env import ToolEnv
 from verifiers.parsers import XMLParser
 from verifiers.utils import preprocess_dataset
-from verifiers.rubrics import MemoryRubric
-from verifiers.prompts import MEMORY_TOOL_PROMPT, MEMORY_TOOL_FEW_SHOT
+from verifiers.rubrics import MemoryRubric, ToolRubric
+from verifiers.prompts import MEMORY_TOOL_PROMPT, MEMORY_TOOL_FEW_SHOT, DEFAULT_TOOL_PROMPT_TEMPLATE
 from verifiers.tools.memory_tools import read, memory_write, memory_read
 
 class MemoryToolEnv(ToolEnv):
@@ -25,7 +25,7 @@ class MemoryToolEnv(ToolEnv):
     """
 
     def __init__(self,
-                 dataset: str = "longbench",
+                 dataset: str = "memory",
                  system_prompt: str = MEMORY_TOOL_PROMPT,
                  few_shot: Optional[List[Dict[str, str]]] = MEMORY_TOOL_FEW_SHOT[0],
                  N: int = 25,       # Max read calls
@@ -62,7 +62,7 @@ class MemoryToolEnv(ToolEnv):
         self._setup_dataset(dataset, system_prompt, few_shot)
         
         # Replace the default ToolRubric with our MemoryRubric
-        self.rubric = MemoryRubric()
+        self.rubric = ToolRubric()
         
         # Override the parsers to match the memory environment expectations
         self.llm_parser = XMLParser(fields=["reasoning", ("tool", "memory", "answer")])
