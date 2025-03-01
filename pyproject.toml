@@ -11,6 +11,8 @@ dependencies = [
     "setuptools",
     "deepspeed",
     "accelerate",
+    "sentence-transformers",
+    "rank-bm25",
     "peft",
     "wandb",
     "duckduckgo-search",
