@@ -210,6 +210,29 @@ SEARCH_FEW_SHOT = [
     ]
 ]
 
+SEARCH_FEW_SHOT_QA = [
+    [
+        {'role': 'user', 'content': 'Are both Elon Musk and Jack Ma founders of technology companies?'},
+        {'role': 'assistant', 'content': tool_parser.format(
+            reasoning="To determine if both Elon Musk and Jack Ma are founders of technology companies, I need to research each individual and their business backgrounds. I'll start by searching for information about Elon Musk.",
+            tool='{"name": "search", "args": {"query": "Elon Musk founder companies", "num_results": 1}}'
+        )},
+        {'role': 'user', 'content': result_parser.format(
+            result="Elon Musk - Wikipedia\nhttps://en.wikipedia.org/wiki/Elon_Musk\nElon Reeve Musk is a business magnate and investor. He is the founder, chairman, CEO, and CTO of SpaceX; angel investor, CEO, product architect and former chairman of Tesla, Inc.; owner, chairman and CTO of X Corp.; founder of the Boring Company and xAI; co-founder of Neuralink and OpenAI; and president of the Musk Foundation."
+        )},
+        {'role': 'assistant', 'content': tool_parser.format(
+            reasoning="The search confirms that Elon Musk is a founder of several technology companies including SpaceX, and co-founder of Neuralink and OpenAI. Now I need to find information about Jack Ma.",
+            tool='{"name": "search", "args": {"query": "Jack Ma founder Alibaba", "num_results": 1}}'
+        )},
+        {'role': 'user', 'content': result_parser.format(
+            result="Jack Ma - Wikipedia\nhttps://en.wikipedia.org/wiki/Jack_Ma\nJack Ma, or Ma Yun, is a Chinese business magnate, investor and philanthropist. He is the co-founder and former executive chairman of Alibaba Group, a multinational technology conglomerate. In addition, Ma is also the co-founder of Yunfeng Capital, a Chinese private equity firm."
+        )},
+        {'role': 'assistant', 'content': tool_parser.format(
+            reasoning="Based on my research, I can now answer the question with confidence. The search results show that Elon Musk is the founder of SpaceX, The Boring Company, and xAI, as well as a co-founder of Neuralink and OpenAI. These are all technology companies. Jack Ma is the co-founder of Alibaba Group, which is explicitly described as a 'multinational technology conglomerate.' He also co-founded Yunfeng Capital, though that's a private equity firm rather than a technology company directly. Both individuals have founded multiple ventures, but what's important for the question is that they both have founded at least one technology company. Elon Musk has founded several technology companies (SpaceX, Neuralink, OpenAI), and Jack Ma has founded at least one major technology company (Alibaba Group). Therefore, the answer is yes.",
+            answer="Yes."
+        )}
+        ]
+    ]
 CALCULATOR_FEW_SHOT = [
     [
         {

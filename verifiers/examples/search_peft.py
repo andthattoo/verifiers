@@ -1,6 +1,6 @@
 import verifiers as vf
 from verifiers.tools import serper_search, jina_scrape
-from verifiers.prompts import SEARCH_FEW_SHOT
+from verifiers.prompts import SEARCH_FEW_SHOT_QA
 from peft import LoraConfig, get_peft_model
 
 model_name = "Qwen/Qwen2.5-7B-Instruct"
@@ -21,7 +21,7 @@ model.print_trainable_parameters()  # Log the trainable parameters
 
 vf_env = vf.ToolEnv(
     dataset="search",
-    #few_shot=SEARCH_FEW_SHOT[0],
+    #few_shot=SEARCH_FEW_SHOT_QA[0],
     tools=[serper_search, jina_scrape],
     max_steps=3
 )

@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def jina_scrape(website: str) -> str:
-    """Scrapes text content from websites using Jina API and returns in readable format.
+    """Scrapes text content from websites and returns in readable format.
     
     Args:
         website: The URL of the website to scrape
