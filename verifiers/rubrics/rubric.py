@@ -37,6 +37,20 @@ class Rubric(ABC):
         responses = [self.get_last_answer(c) for c in completions]
         return [1.0 if str(r) == str(a) else 0.0 for r, a in zip(responses, answer)]
 
+    def multi_answer_exact_match_reward_func(self, completions, answer, **kwargs) -> List[float]:
+        """Reward function that checks if the final answer matches any of the expected answers."""
+        responses = [self.get_last_answer(c) for c in completions]
+        results = []
+        for r, a in zip(responses, answer):
+            if isinstance(a, list):
+                # Check if response matches any of the possible answers
+                match = any(str(r) == str(possible_answer) for possible_answer in a)
+                results.append(1.0 if match else 0.0)
+            else:
+                # Fallback to regular exact match for non-list answers
+                results.append(1.0 if str(r) == str(a) else 0.0)
+        return results
+
     def int_answer_reward_func(self, completions, answer, **kwargs) -> List[float]:
         """Reward function that checks if the final answer is an integer."""
         responses = [self.get_last_answer(c) for c in completions]

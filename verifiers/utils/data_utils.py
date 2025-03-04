@@ -84,5 +84,12 @@ def preprocess_dataset(dataset_name: str = "gsm8k",
             "answer": x["answerKey"]
         })
         return dataset
+    elif dataset_name == "memory":
+        dataset: Dataset = load_dataset("andthattoo/memory")[split]
+        dataset = dataset.map(lambda x: {
+            "prompt": format_prompt(x["question"], system_prompt, few_shot, fewshot_prob),
+            "answer": x["answer"],
+        })
+        return dataset
     else:
         raise ValueError(f"Dataset {dataset_name} not supported for preprocess_dataset.")
