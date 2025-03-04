@@ -7,8 +7,8 @@ model_name = "Qwen/Qwen2.5-7B-Instruct"
 model, tokenizer = vf.get_model_and_tokenizer(model_name)
 
 peft_config = LoraConfig(
-    r=16,
-    lora_alpha=32,
+    r=64,
+    lora_alpha=128,
     lora_dropout=0.05,
     bias="none",
     task_type="CAUSAL_LM",
