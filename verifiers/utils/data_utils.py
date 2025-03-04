@@ -84,7 +84,7 @@ def preprocess_dataset(dataset_name: str = "gsm8k",
             "answer": x["answerKey"]
         })
         return dataset
-    elif dataset_name == "memory":
+    elif dataset_name == "search":
         dataset: Dataset = load_dataset("andthattoo/memory")[split]
         dataset = dataset.map(lambda x: {
             "prompt": format_prompt(x["question"], system_prompt, few_shot, fewshot_prob),
