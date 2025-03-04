@@ -30,3 +30,7 @@ logs/
 
 # WIPs
 wip/
+
+# Backup files
+*.bak
+*.bak[0-9]*

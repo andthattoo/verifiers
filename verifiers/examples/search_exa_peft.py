@@ -35,8 +35,8 @@ training_args = vf.get_default_grpo_config(
     num_gpus=8 # 7 train + 1 inference
 )
 # rollouts per prompt
-training_args.num_generations = 7
-# minibatch size per GPU ( bs 6 * 7 gpus / 7 rollouts -> 6 prompts per batch)
+training_args.num_generations = 6  # Changed from 7 to 6 to make it evenly divide the batch size
+# minibatch size per GPU ( bs 6 * 7 gpus / 6 rollouts -> 7 prompts per batch)
 training_args.per_device_train_batch_size = 6
 # batches to accumulate (6 prompts * 4 -> 24 prompts per global batch)
 training_args.gradient_accumulation_steps = 4
