@@ -195,17 +195,38 @@ COMMONSENSE_FEW_SHOT = [
 
 SEARCH_FEW_SHOT = [
     [
-        {'role': 'user', 'content': 'Question: Which of the following is an example of mechanical weathering?\n\nChoices:\nA. A rock turns red when iron minerals are exposed to oxygen.\nB. A rock breaks apart after water freezes and expands in a crack.\nC. A rock dissolves as acidic rainwater flows over its surface.\nD. A rock changes composition when exposed to extreme heat.'},
+        {'role': 'user', 'content': 'What programming languages were used to build Facebook?'},
         {'role': 'assistant', 'content': tool_parser.format(
-            reasoning="I need to understand what mechanical weathering is and which of these options matches that phenomenon. Let me search for information about mechanical weathering.",
-            tool='{"name": "search", "args": {"query": "what is mechanical weathering examples", "num_results": 3}}'
+            reasoning="To answer what programming languages were used to build Facebook, I need to search for information about Facebook's technology stack and development history.",
+            tool='{"name": "search", "args": {"query": "programming languages used to build Facebook", "num_results": 2}}'
         )},
         {'role': 'user', 'content': result_parser.format(
-            result="• Mechanical Weathering - Definition, Processes and Types\n  Mechanical weathering, also known as physical weathering, is the process by which rocks are broken down into smaller pieces by external forces. Examples include frost wedging (when water freezes and expands in cracks), thermal expansion/contraction, and pressure release.\n\n• Mechanical and Chemical Weathering - Earth Science\n  Mechanical weathering breaks rocks into smaller pieces without changing their composition. Ice wedging occurs when water gets into cracks, freezes, and expands, breaking the rock apart. Other forms include plant root growth, animal activity, and abrasion.\n\n• Mechanical Weathering: Definition, Types, Examples - Geology Science\n  Types of mechanical weathering include frost wedging, salt crystallization, thermal expansion, plant activity, and animal activity. The most common mechanical weathering process in cold climates is frost wedging, where water enters rock cracks, freezes, and expands."
+            result="What programming language is Facebook written in? - Quora\nhttps://www.quora.com/What-programming-language-is-Facebook-written-in\nPhillip Nelson. Former CTO, Python Developer, Consultant. Originally Answered: What programming language is Facebook coded in? PHP is the main language used by Facebook. Specifically the HipHop Virtual Machine (hhvm) which is an open source virtual machine for executing programs written in PHP.\n\nWhat Programming Languages Does Facebook Use? - Code Platoon\nhttps://www.codeplatoon.org/what-programming-languages-does-facebook-use/\nThe platform was initially written in PHP, a server-side scripting language. As the site grew, Facebook developed its own version of PHP called Hack, which was designed to maintain compatibility with PHP while adding static typing features to improve developer productivity."
         )},
         {'role': 'assistant', 'content': tool_parser.format(
-            reasoning="Based on the search results, mechanical weathering is the process by which rocks are broken down into smaller pieces by external forces, without changing their chemical composition. Some examples include:\n\n1. Frost wedging - when water gets into cracks, freezes, and expands, breaking the rock apart\n2. Thermal expansion/contraction\n3. Plant root growth\n4. Animal activity\n5. Abrasion\n\nLooking at the answer choices:\nA. A rock turns red when iron minerals are exposed to oxygen - This is chemical weathering, as it involves a chemical change (oxidation).\nB. A rock breaks apart after water freezes and expands in a crack - This is frost wedging, a form of mechanical weathering.\nC. A rock dissolves as acidic rainwater flows over its surface - This is chemical weathering (dissolution).\nD. A rock changes composition when exposed to extreme heat - This is a chemical/thermal change, not mechanical weathering.\n\nThe answer is B, as it's the only option that describes mechanical weathering.",
-            answer="B"
+            reasoning="I've found that Facebook was initially built using PHP, and later developed their own version of PHP called Hack. Let me search for more information about their full technology stack.",
+            tool='{"name": "search", "args": {"query": "Facebook technology stack JavaScript React", "num_results": 1}}'
+        )},
+        {'role': 'user', 'content': result_parser.format(
+            result="Facebook Tech Stack: The Technology Behind the Social Media Giant\nhttps://theiotmagazine.com/facebook-tech-stack-the-technology-behind-the-social-media-giant-a9982f2778c4\nProgramming Languages: Facebook uses a variety of programming languages, with PHP and Hack being primary server-side languages. JavaScript is used for client-side development. The company also utilizes Python for data analysis and C++ for backend services that require high performance. Facebook created React, a JavaScript library for building user interfaces, which is now widely used across the web."
+        )},
+        {'role': 'assistant', 'content': tool_parser.format(
+            reasoning="Based on my research, I can now provide a comprehensive answer about the programming languages used to build Facebook. The information shows that Facebook was initially built with PHP, and they later developed their own PHP variant called Hack for server-side programming. On the client side, they use JavaScript, particularly with their own React library. They also use Python for data analysis and C++ for performance-critical backend services. This gives me enough information to provide a concise answer listing the primary programming languages used in Facebook's development.",
+            answer="PHP, Hack, JavaScript, Python, C++"
+        )}
+    ],
+    [
+        {'role': 'user', 'content': 'Who invented the airplane?'},
+        {'role': 'assistant', 'content': tool_parser.format(
+            reasoning="I need to search for who invented the airplane.",
+            tool='{"name": "search", "args": {"query": "who invented the airplane", "num_results": 1}}'
+        )},
+        {'role': 'user', 'content': result_parser.format(
+            result="Wright brothers - Wikipedia\nhttps://en.wikipedia.org/wiki/Wright_brothers\nThe Wright brothers, Orville and Wilbur Wright, are credited with inventing, building, and flying the world's first successful airplane."
+        )},
+        {'role': 'assistant', 'content': tool_parser.format(
+            reasoning="The result confirms the airplane was invented by the Wright brothers.",
+            answer="The Wright brothers."
         )}
     ]
 ]
