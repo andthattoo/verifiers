@@ -93,3 +93,12 @@ def preprocess_dataset(dataset_name: str = "gsm8k",
         return dataset
     else:
         raise ValueError(f"Dataset {dataset_name} not supported for preprocess_dataset.")
+
+
+if __name__ == "__main__":
+
+    ds = preprocess_dataset("search")
+
+    for d in ds:
+        if d["question"] == "What WikiLeaks using whistleblower is notable for having a hacking organization with a user base of over 1,800,000?":
+            print(d["answer"])
