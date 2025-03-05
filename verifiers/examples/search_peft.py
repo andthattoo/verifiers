@@ -29,7 +29,7 @@ train_dataset = vf_env.get_dataset()
 rubric = vf_env.get_rubric()
 
 # notable defaults: lr = 1e-6, max_grad_norm = 0.01, constant lr 10 warmup steps, 1024 tokens in+out
-run_name = "search_peft" + model_name.split("/")[-1].lower()
+run_name = "search_peft_" + model_name.split("/")[-1].lower()
 training_args = vf.get_default_grpo_config(
     run_name=run_name,
     num_gpus=1 # Single GPU setup
