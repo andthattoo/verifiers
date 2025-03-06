@@ -34,6 +34,11 @@ training_args.beta = 0.0
 training_args.vllm_max_model_len = 32000
 training_args.vllm_gpu_memory_utilization=0.7
 
+training_args.gradient_checkpointing = True
+training_args.bf16 = True
+training_args.max_grad_norm = 0.01
+training_args.per_device_train_batch_size = 4
+
 trainer = vf.GRPOEnvTrainer(
     model=model,
     processing_class=tokenizer,
