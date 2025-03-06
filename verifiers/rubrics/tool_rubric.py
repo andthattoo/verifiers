@@ -104,8 +104,8 @@ class ToolRubric(Rubric):
         The answer "{model_answer}" correctly contains the key information "{reference_answer}".
         Answer: [unused0] [MASK]"""
 
-        # Tokenize the prompt
-        inputs = tokenizer(prompt, return_tensors="pt").to(device)
+        inputs = tokenizer(prompt, return_tensors="pt")
+        inputs = {k: v.to(device) for k, v in inputs.items()}
 
         # Get model prediction
         with torch.no_grad():
