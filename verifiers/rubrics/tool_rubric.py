@@ -25,13 +25,28 @@ class ToolRubric(Rubric):
         # Load model and tokenizer
         model_name = "answerdotai/ModernBERT-Large-Instruct"
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        if self.device == 'cuda':
-            self.model = AutoModelForMaskedLM.from_pretrained(model_name, attn_implementation="flash_attention_2")
+        if torch.cuda.is_available():
+            # For distributed training, use the local rank to determine device
+            if torch.distributed.is_initialized():
+                local_rank = torch.distributed.get_rank()
+                self.device = f"cuda:{local_rank}"
+            else:
+                self.device = "cuda"  # Single GPU training
+        else:
+            self.device = "cpu"
+
+        if 'cuda' in self.device:
+            self.model = AutoModelForMaskedLM.from_pretrained(
+                model_name,
+                attn_implementation="flash_attention_2",
+                device_map=self.device  # Explicitly map to this device
+            )
         else:
             self.model = AutoModelForMaskedLM.from_pretrained(model_name)
+            self.model = self.model.to(self.device)
 
-        self.model.to(self.device)
+        model_device = next(self.model.parameters()).device
+        print(f"Model loaded on device: {model_device}")
 
         self.test_bert_device_consistency(self.model, self.tokenizer, self.device)
 
@@ -104,6 +119,8 @@ class ToolRubric(Rubric):
         """
         results = {}
 
+        bert_model = bert_model.to(device)
+
         prompt = f"""Is this statement true or false?
         The answer "{model_answer}" correctly contains the key information "{reference_answer}".
         Answer: [unused0] [MASK]"""
@@ -149,7 +166,6 @@ class ToolRubric(Rubric):
         Test to verify that all tensors are properly moved to the correct device
         in a multi-GPU setup before starting training.
         """
-
         # Get local rank for this process
         local_rank = int(os.environ.get("LOCAL_RANK", 0))
 
