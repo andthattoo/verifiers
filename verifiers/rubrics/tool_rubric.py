@@ -7,6 +7,8 @@ from transformers import AutoTokenizer, AutoModelForMaskedLM
 import torch
 import torch.nn.functional as F
 
+import os
+
 class ToolRubric(Rubric):
     def __init__(self,
                  parser: XMLParser = XMLParser(fields=["reasoning", ("tool", "answer")]),
@@ -30,6 +32,8 @@ class ToolRubric(Rubric):
             self.model = AutoModelForMaskedLM.from_pretrained(model_name)
 
         self.model.to(self.device)
+
+        self.test_bert_device_consistency(self.model, self.tokenizer, self.device)
 
     def tool_execution_reward_func(self, completions: List[List[Dict[str, str]]], **kwargs) -> List[float]:
         """
@@ -139,3 +143,57 @@ class ToolRubric(Rubric):
 
         # Final decision
         return results["bert_match"], results
+
+    def test_bert_device_consistency(self, model, tokenizer, device):
+        """
+        Test to verify that all tensors are properly moved to the correct device
+        in a multi-GPU setup before starting training.
+        """
+
+        # Get local rank for this process
+        local_rank = int(os.environ.get("LOCAL_RANK", 0))
+
+        # Create sample inputs
+        reference = "The capital of France is Paris."
+        answer = "Paris is the capital of France."
+        prompt = f"""Is this statement true or false?
+        The answer "{answer}" correctly contains the key information "{reference}".
+        Answer: [unused0] [MASK]"""
+
+        # Tokenize and move to device
+        inputs = tokenizer(prompt, return_tensors="pt")
+        inputs = {k: v.to(device) for k, v in inputs.items()}
+
+        # Verify that all tensors are on the correct device
+        all_correct = True
+        for k, v in inputs.items():
+            if hasattr(v, 'device') and str(v.device) != device:
+                all_correct = False
+                print(f"⚠️ Error: Input tensor '{k}' is on {v.device}, should be on {device}")
+
+        # Check model device
+        model_device = next(model.parameters()).device
+        if str(model_device) != device:
+            all_correct = False
+            print(f"⚠️ Error: Model is on {model_device}, should be on {device}")
+
+        # Now try a forward pass to catch any internal device mismatches
+        try:
+            with torch.no_grad():
+                outputs = model(**inputs)
+            print(f"✅ Forward pass successful on device {device}")
+        except RuntimeError as e:
+            all_correct = False
+            print(f"⚠️ Error during forward pass: {e}")
+
+        # Report overall result
+        if all_correct:
+            print(f"✅ All device consistency checks passed on rank {local_rank}")
+        else:
+            print(f"❌ Device consistency check failed on rank {local_rank}")
+
+        # If using distributed training, make sure all processes report
+        if torch.distributed.is_initialized():
+            torch.distributed.barrier()
+
+        return all_correct
