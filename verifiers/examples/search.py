@@ -2,7 +2,7 @@ import verifiers as vf
 from verifiers.tools import search, scrape
 from verifiers.prompts import SEARCH_FEW_SHOT
 
-model_name = "Qwen/Qwen2.5-7B"
+model_name = "Qwen/Qwen2.5-7B-Instruct"
 model, tokenizer = vf.get_model_and_tokenizer(model_name)
 
 vf_env = vf.ToolEnv(
