@@ -26,24 +26,22 @@ class ToolRubric(Rubric):
         model_name = "answerdotai/ModernBERT-Large-Instruct"
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         if torch.cuda.is_available():
-            # For distributed training, use the local rank to determine device
-            if torch.distributed.is_initialized():
-                local_rank = torch.distributed.get_rank()
-                self.device = f"cuda:{local_rank}"
-            else:
-                self.device = "cuda"  # Single GPU training
+            # Get local_rank from environment variable directly
+            local_rank = int(os.environ.get("LOCAL_RANK", "0"))
+            self.device = f"cuda:{local_rank}"
+
+            # Force PyTorch to use this device
+            torch.cuda.set_device(local_rank)
         else:
             self.device = "cpu"
 
         if 'cuda' in self.device:
             self.model = AutoModelForMaskedLM.from_pretrained(
                 model_name,
-                attn_implementation="flash_attention_2",
-                device_map=self.device  # Explicitly map to this device
-            )
+                attn_implementation="flash_attention_2"
+            ).to(self.device)  # Explicitly move to correct device
         else:
-            self.model = AutoModelForMaskedLM.from_pretrained(model_name)
-            self.model = self.model.to(self.device)
+            self.model = AutoModelForMaskedLM.from_pretrained(model_name).to(self.device)
 
         model_device = next(self.model.parameters()).device
         print(f"Model loaded on device: {model_device}")
@@ -133,7 +131,8 @@ class ToolRubric(Rubric):
             outputs = bert_model(**inputs)
 
         # Find the masked token position
-        mask_idx = (inputs.input_ids == tokenizer.mask_token_id).nonzero()[0, 1]
+        #mask_idx = (inputs.input_ids == tokenizer.mask_token_id).nonzero()[0, 1]
+        mask_idx = (inputs['input_ids'] == tokenizer.mask_token_id).nonzero()[0, 1]
 
         # Get logits for the masked position
         logits = outputs.logits[0, mask_idx]
