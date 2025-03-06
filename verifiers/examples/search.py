@@ -21,9 +21,9 @@ training_args = vf.get_default_grpo_config(
     num_gpus=8 # Single GPU setup
 )
 # rollouts per prompt
-training_args.num_generations = 6  # Changed from 7 to 6 to make it evenly divide the batch size
+training_args.num_generations = 4  # Changed from 7 to 6 to make it evenly divide the batch size
 # minibatch size per GPU (bs 6 on single GPU / 6 rollouts -> 1 prompt per batch)
-training_args.per_device_train_batch_size = 6
+training_args.per_device_train_batch_size = 4
 # batches to accumulate (1 prompt * 4 -> 4 prompts per global batch)
 training_args.gradient_accumulation_steps = 4
 # steps per global batch (1 on-policy, 2 off-policy)
@@ -36,8 +36,7 @@ training_args.vllm_gpu_memory_utilization=0.7
 
 training_args.gradient_checkpointing = True
 training_args.bf16 = True
-training_args.max_grad_norm = 0.01
-training_args.per_device_train_batch_size = 4
+# training_args.max_grad_norm = 0.01
 
 trainer = vf.GRPOEnvTrainer(
     model=model,
