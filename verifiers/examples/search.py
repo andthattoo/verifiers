@@ -31,7 +31,7 @@ training_args.num_iterations = 2
 # no ref model
 training_args.beta = 0.0
 
-training_args.vllm_max_model_len = 51200
+training_args.vllm_max_model_len = 64000
 
 trainer = vf.GRPOEnvTrainer(
     model=model,
