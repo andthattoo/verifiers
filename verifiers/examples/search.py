@@ -25,14 +25,14 @@ training_args.num_generations = 2  # Changed from 7 to 6 to make it evenly divid
 # minibatch size per GPU (bs 6 on single GPU / 6 rollouts -> 1 prompt per batch)
 training_args.per_device_train_batch_size = 2
 # batches to accumulate (1 prompt * 4 -> 4 prompts per global batch)
-training_args.gradient_accumulation_steps = 8
+training_args.gradient_accumulation_steps = 4
 # steps per global batch (1 on-policy, 2 off-policy)
 training_args.num_iterations = 2
 # no ref model
 training_args.beta = 0.0
 
 training_args.vllm_max_model_len = 32000
-training_args.vllm_gpu_memory_utilization=0.85
+training_args.vllm_gpu_memory_utilization=0.7
 
 training_args.gradient_checkpointing = True
 training_args.bf16 = True
