@@ -8,7 +8,7 @@ model, tokenizer = vf.get_model_and_tokenizer(model_name)
 vf_env = vf.ToolEnv(
     dataset="search",
     few_shot=SEARCH_FEW_SHOT[1],
-    tools=[search, scrape],
+    tools=[search],
     max_steps=10
 )
 train_dataset = vf_env.get_dataset()
@@ -31,7 +31,7 @@ training_args.num_iterations = 2
 # no ref model
 training_args.beta = 0.0
 
-training_args.vllm_max_model_len = 64000
+#training_args.vllm_max_model_len = 64000
 
 trainer = vf.GRPOEnvTrainer(
     model=model,
