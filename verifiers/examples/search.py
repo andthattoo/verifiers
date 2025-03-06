@@ -1,14 +1,14 @@
 import verifiers as vf
-from verifiers.tools import serper_search, jina_scrape
+from verifiers.tools import search, scrape
 from verifiers.prompts import SEARCH_FEW_SHOT
 
-model_name = "Qwen/Qwen2.5-7B-Instruct"
+model_name = "Qwen/Qwen2.5-7B"
 model, tokenizer = vf.get_model_and_tokenizer(model_name)
 
 vf_env = vf.ToolEnv(
     dataset="search",
     few_shot=SEARCH_FEW_SHOT[1],
-    tools=[serper_search, jina_scrape],
+    tools=[search, scrape],
     max_steps=10
 )
 train_dataset = vf_env.get_dataset()
@@ -30,6 +30,9 @@ training_args.gradient_accumulation_steps = 4
 training_args.num_iterations = 2
 # no ref model
 training_args.beta = 0.0
+
+training_args.vllm_max_model_len = 51200
+
 trainer = vf.GRPOEnvTrainer(
     model=model,
     processing_class=tokenizer,

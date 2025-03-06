@@ -15,6 +15,16 @@ source .venv/bin/activate
 accelerate launch --config-file configs/zero3.yaml --num-processes [N-1] verifiers/examples/gsm8k_calculator.py
 ```
 
+for errs:
+```
+sudo apt update
+sudo apt install python3.11 python3.11-venv python3.11-dev
+rm -rf .venv
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install uv
+uv sync ...
+```
 
 Ensure your `wandb` and `huggingface-cli` logins are set up (or set `report_to=None` in `training_args`).
 

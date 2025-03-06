@@ -80,9 +80,9 @@ class NewsResult:
         return f"{self.title}\n{self.link}\n{self.snippet}\n{self.date}\n{self.source}\n{self.image_url}\n{self.position}"
 
 
-def serper_search(query: str, search_type: str = "search", 
+def search(query: str, search_type: str = "search",
                  lang: str = "en", n_results: int = 3) -> str:
-    """Conducts a web search using Serper API and returns the results.
+    """Conducts a web search and returns the results.
     
     Args:
         query: The search query

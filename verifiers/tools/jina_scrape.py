@@ -3,7 +3,7 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-def jina_scrape(website: str) -> str:
+def scrape(website: str) -> str:
     """Scrapes text content from websites and returns in readable format.
     
     Args:
