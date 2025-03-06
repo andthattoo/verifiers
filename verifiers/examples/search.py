@@ -32,7 +32,7 @@ training_args.num_iterations = 2
 training_args.beta = 0.0
 
 training_args.vllm_max_model_len = 32000
-training_args.vllm_gpu_memory_utilization=0.7
+training_args.vllm_gpu_memory_utilization=0.85
 
 training_args.gradient_checkpointing = True
 training_args.bf16 = True
