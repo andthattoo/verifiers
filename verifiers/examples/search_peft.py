@@ -7,8 +7,8 @@ model_name = "Qwen/Qwen2.5-7B-Instruct"
 model, tokenizer = vf.get_model_and_tokenizer(model_name)
 
 peft_config = LoraConfig(
-    r=64,
-    lora_alpha=128,
+    r=128,
+    lora_alpha=256,
     lora_dropout=0.05,
     bias="none",
     task_type="CAUSAL_LM",
@@ -21,8 +21,8 @@ model.print_trainable_parameters()  # Log the trainable parameters
 
 vf_env = vf.ToolEnv(
     dataset="search",
-    few_shot=SEARCH_FEW_SHOT[1],
-    tools=[search, scrape],
+    #few_shot=SEARCH_FEW_SHOT[1],
+    tools=[search],
     max_steps=10
 )
 train_dataset = vf_env.get_dataset()

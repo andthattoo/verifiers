@@ -7,6 +7,7 @@ This repository contains a set of tools for reinforcement learning with LLMs in 
 PyPI [coming soon](https://pypi.org/project/verifiers/) once a couple more features are added, just clone it for now and run:
 ```
 curl -LsSf https://astral.sh/uv/install.sh | sh
+source $HOME/.local/bin/env
 git clone https://github.com/willccbb/verifiers.git
 cd verifiers
 uv sync
