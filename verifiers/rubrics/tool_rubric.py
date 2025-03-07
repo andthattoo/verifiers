@@ -36,19 +36,8 @@ class ToolRubric(Rubric):
         else:
             self.device = "cpu"
         """
-        local_rank = int(os.environ.get("LOCAL_RANK", "0"))
-        if torch.cuda.is_available():
-            self.device = f"cuda:{local_rank}"
-        else:
-            self.device = "cpu"
-
-        if 'cuda' in self.device:
-            self.model = AutoModelForMaskedLM.from_pretrained(
-                model_name,
-                attn_implementation="flash_attention_2"
-            ).to(self.device)  # Explicitly move to correct device
-        else:
-            self.model = AutoModelForMaskedLM.from_pretrained(model_name).to(self.device)
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.model = AutoModelForMaskedLM.from_pretrained(model_name).to(self.device)
 
         model_device = next(self.model.parameters()).device
         print(f"Model loaded on device: {model_device}")
@@ -124,7 +113,7 @@ class ToolRubric(Rubric):
         """
         results = {}
 
-        bert_model = bert_model.to(device)
+        #bert_model = bert_model.to(device)
 
         prompt = f"""Is this statement true or false?
         The answer "{model_answer}" correctly contains the key information "{reference_answer}".
