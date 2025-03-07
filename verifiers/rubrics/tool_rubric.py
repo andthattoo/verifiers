@@ -41,10 +41,17 @@ class ToolRubric(Rubric):
             self.device = "cpu"
 
         if 'cuda' in self.device:
+            """
             self.model = AutoModelForMaskedLM.from_pretrained(
                 model_name,
                 attn_implementation="flash_attention_2"
             ).to(self.device)  # Explicitly move to correct device
+            """
+
+            self.model = AutoModelForMaskedLM.from_pretrained(model_name)
+            self.model = self.model.to(self.device)
+            if hasattr(self.model, "enable_flash_attention"):
+                self.model.enable_flash_attention()
         else:
             self.model = AutoModelForMaskedLM.from_pretrained(model_name).to(self.device)
 
