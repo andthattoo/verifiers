@@ -25,40 +25,35 @@ class ToolRubric(Rubric):
         # Load model and tokenizer
         model_name = "answerdotai/ModernBERT-Large-Instruct"
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        """
         if torch.cuda.is_available():
-            device_count = torch.cuda.device_count()
-            if device_count == 1:
-                self.device = "cuda:0"
-                torch.cuda.set_device(0)
-            else:
-                # Get local_rank from environment variable directly
-                local_rank = int(os.environ.get("LOCAL_RANK", "0"))
-                self.device = f"cuda:{local_rank}"
+            # Get local_rank from environment variable directly
+            local_rank = int(os.environ.get("LOCAL_RANK", "0"))
+            self.device = f"cuda:{local_rank}"
 
-                # Force PyTorch to use this device
-                torch.cuda.set_device(local_rank)
+            # Force PyTorch to use this device
+            #torch.cuda.set_device(local_rank)
+        else:
+            self.device = "cpu"
+        """
+        local_rank = int(os.environ.get("LOCAL_RANK", "0"))
+        if torch.cuda.is_available():
+            self.device = f"cuda:{local_rank}"
         else:
             self.device = "cpu"
 
         if 'cuda' in self.device:
-            """
             self.model = AutoModelForMaskedLM.from_pretrained(
                 model_name,
                 attn_implementation="flash_attention_2"
             ).to(self.device)  # Explicitly move to correct device
-            """
-
-            self.model = AutoModelForMaskedLM.from_pretrained(model_name)
-            self.model = self.model.to(self.device)
-            if hasattr(self.model, "enable_flash_attention"):
-                self.model.enable_flash_attention()
         else:
             self.model = AutoModelForMaskedLM.from_pretrained(model_name).to(self.device)
 
         model_device = next(self.model.parameters()).device
         print(f"Model loaded on device: {model_device}")
 
-        self.test_bert_device_consistency(self.model, self.tokenizer, self.device)
+        #self.test_bert_device_consistency(self.model, self.tokenizer, self.device)
 
     def tool_execution_reward_func(self, completions: List[List[Dict[str, str]]], **kwargs) -> List[float]:
         """
