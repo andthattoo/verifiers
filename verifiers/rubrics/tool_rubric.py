@@ -29,7 +29,7 @@ class ToolRubric(Rubric):
             device_count = torch.cuda.device_count()
             if device_count == 1:
                 #torch.cuda.set_device("cuda")
-                self.device = "cuda"
+                self.device = "cuda:0"
             else:
                 # Get local_rank from environment variable directly
                 local_rank = int(os.environ.get("LOCAL_RANK", "0"))
