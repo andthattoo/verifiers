@@ -26,12 +26,16 @@ class ToolRubric(Rubric):
         model_name = "answerdotai/ModernBERT-Large-Instruct"
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         if torch.cuda.is_available():
-            # Get local_rank from environment variable directly
-            local_rank = int(os.environ.get("LOCAL_RANK", "0"))
-            self.device = f"cuda:{local_rank}"
+            device_count = torch.cuda.device_count()
+            if device_count == 1:
+                torch.cuda.set_device("cuda")
+            else:
+                # Get local_rank from environment variable directly
+                local_rank = int(os.environ.get("LOCAL_RANK", "0"))
+                self.device = f"cuda:{local_rank}"
 
-            # Force PyTorch to use this device
-            torch.cuda.set_device(local_rank)
+                # Force PyTorch to use this device
+                torch.cuda.set_device(local_rank)
         else:
             self.device = "cpu"
 
@@ -167,7 +171,7 @@ class ToolRubric(Rubric):
         """
         # Get local rank for this process
         local_rank = int(os.environ.get("LOCAL_RANK", 0))
-
+        print(f"Running device consistency check on rank {local_rank}")
         # Create sample inputs
         reference = "The capital of France is Paris."
         answer = "Paris is the capital of France."
